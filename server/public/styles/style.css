@@ -1,3 +1,6 @@
 body {
-    background-color: magenta;
+    font-family: 'Urbanist', sans-serif;
+}
+#mainDiv {
+    font-size: larger;
 }
