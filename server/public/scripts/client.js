@@ -9,9 +9,7 @@ function setupClickListeners() {
     $( '#outputDiv' ).on( 'click', '#completeTaskButton', updateTask );
 }
 function addTask() {
-    console.log( `in addTask` );
     let taskToSend = createTaskObject();
-    console.log( `in addTasks`, taskToSend  );
     $.ajax({
         method: 'POST',
         url: '/tasks',
@@ -24,12 +22,10 @@ function addTask() {
     })
 }
 function getTasks() {
-    console.log( `in getTasks()` );
     $.ajax({
         method: 'GET',
         url: '/tasks'
     }).then( function ( response ){
-        console.log( `in back from GET on server with response:`, response );
         //Check that response is not empty before continuing
         if ( response.length != 0 ) {
             let elViewTasks = $( '#outputDiv' );
@@ -43,7 +39,6 @@ function getTasks() {
     });
 }
 function removeTask() {
-    console.log( `in removeTask and the id is:`, $( this ).parent().parent().data( 'id' ) );
     //id is on the <tr> element which is the "grandparent" of the button
     let idOfTask = $( this ).parent().parent().data( 'id' );
 
@@ -51,7 +46,6 @@ function removeTask() {
         method: 'DELETE',
         url: '/tasks?id=' + idOfTask
     }).then( function ( response ) {
-        console.log( 'remove task', response );
         getTasks();
     }).catch( function ( error ) {
         console.log( `error with delete`, error );
@@ -59,18 +53,15 @@ function removeTask() {
     })
 }
 function updateTask() {
-    console.log( `in updateTask` );
-
     let taskToUpdate = $( this ).parent().parent().data( 'id' );
-    let todayDate = new Date().toLocaleDateString();
-    console.log( 'todayDate in updateTask is:', todayDate );
-    console.log( `'date_completed='${todayDate}`);
+    let todayDate = new Date().toISOString().slice( 0,10 );
+
     $.ajax({
         method: 'PUT',
         url: `/tasks?id=${taskToUpdate}`,
-        data: 'date_completed=10/08/2021'
+        //data: 'date_completed=10/08/2021'
+        data: 'date_completed='+todayDate
     }).then( function ( response ) {
-        console.log( `back from update` );
         getTasks();
     }).catch( function ( error ){
         console.log( `error with update:`, error );
@@ -118,15 +109,12 @@ function createTableOutput( taskArray ) {
     return appendString;
 }
 function createTaskObject() {
-    console.log( `task name is:`, $( '#task' ).val() );
-    console.log( `assigned to is:`, $( '#assigned' ).val() );
     let taskObject = {
         taskName : $( '#task' ).val(),
         assignedTo: $( '#assigned' ).val(),
         dateCreated: new Date().toLocaleDateString(),
         dateCompleted: ''
     };
-    console.log( `taskObject:`, taskObject );
     return taskObject;
 }
 function clearInput() {
