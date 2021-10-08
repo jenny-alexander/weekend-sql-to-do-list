@@ -5,7 +5,8 @@ function setupClickListeners() {
     //load screen with db records
     getTasks();
     $( '#addTaskButton' ).on( 'click', addTask );
-    $( '#outputDiv' ).on( 'click', '#removeTaskButton', removeTask )
+    $( '#outputDiv' ).on( 'click', '#removeTaskButton', removeTask );
+    $( '#outputDiv' ).on( 'click', '#completeTaskButton', updateTask );
 }
 function addTask() {
     console.log( `in addTask` );
@@ -19,7 +20,7 @@ function addTask() {
         getTasks();
     }).catch( function ( err ){
         console.log( err );
-        alert( `error saving task` );
+        alert( `Oops! There was an error getting the tasks. Check console for details.` );
     })
 }
 function getTasks() {
@@ -38,7 +39,7 @@ function getTasks() {
         }
     }).catch( function( err ){
         console.log( `error getting tasks:`, err );
-        alert('Error getting tasks - see console'); //TODO - change to sweet alert
+        alert( `Oops! There was an error adding the task. Check console for details.` ); //TODO - change to sweet alert
     });
 }
 function removeTask() {
@@ -54,7 +55,26 @@ function removeTask() {
         getTasks();
     }).catch( function ( error ) {
         console.log( `error with delete`, error );
-        alert( `Oops! There was an error with your delete. Check console for details.` );
+        alert( `Oops! There was an error deleting the task. Check console for details.` );
+    })
+}
+function updateTask() {
+    console.log( `in updateTask` );
+
+    let taskToUpdate = $( this ).parent().parent().data( 'id' );
+    let todayDate = new Date().toLocaleDateString();
+    console.log( 'todayDate in updateTask is:', todayDate );
+    console.log( `'date_completed='${todayDate}`);
+    $.ajax({
+        method: 'PUT',
+        url: `/tasks?id=${taskToUpdate}`,
+        data: 'date_completed=10/08/2021'
+    }).then( function ( response ) {
+        console.log( `back from update` );
+        getTasks();
+    }).catch( function ( error ){
+        console.log( `error with update:`, error );
+        alert( `Oops! There was an error completing the task. Check console for details.` );
     })
 }
 function createTableOutput( taskArray ) {
