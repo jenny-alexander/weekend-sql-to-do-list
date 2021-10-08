@@ -4,12 +4,22 @@ $( function() {
 function setupClickListeners() {
     //load screen with db records
     getTasks();
+    $( '#addTaskButton' ).on( 'click', addTask );
 }
-function addTasks() {
-    console.log( `inaddTasks` );
-
-    //create the object to send - make a function for this
-    let objectToSend = createTaskObject();
+function addTask() {
+    console.log( `in addTask` );
+    let taskToSend = createTaskObject();
+    console.log( `in addTasks`, taskToSend  );
+    $.ajax({
+        method: 'POST',
+        url: '/tasks',
+        data: taskToSend
+    }).then( function ( response ){
+        getTasks();
+    }).catch( function ( err ){
+        console.log( err );
+        alert( `error saving task` );
+    })
 }
 function getTasks() {
     console.log( `in getTasks()` );
@@ -23,6 +33,7 @@ function getTasks() {
             let elViewTasks = $( '#outputDiv' );
             elViewTasks.empty();
             elViewTasks.append( createTableOutput( response ) );
+            clearInput();
         }
     }).catch( function( err ){
         console.log( `error getting tasks:`, err );
@@ -43,36 +54,45 @@ function createTableOutput( taskArray ) {
                        <img src=${trashImage}></button>`;
 
     //Creating this part of the table (table class, headers) doesn't change.
-    let appendString = `<table class="table table-bordered"><thead class="table-header bg-forestGreen">
+    let appendString = `<table class="table"><thead class="table-header bg-forestGreen">
                         <tr><th>Task</th><th>AssignedTo</th><th>Date Created</th>
                         <th>Date Completed</th><th>Actions</th></tr></thead><tbody>`;
                         
     for ( let i = 0; i < taskArray.length; i++ ) {
         dateCreated = new Date( taskArray[i].date_created ).toLocaleDateString();
-        if ( taskArray[i].date_completed ) {
-            rowType = `success`;
-            dateCompleted = new Date(taskArray[i].date_completed ).toLocaleDateString();
-            completeCell = `<img id="checkComplete" src=${largeCheckImage}>${dateCompleted}`;
-            actionCell = completeButton;
-        } else {
+        if ( taskArray[i].date_completed == null ) {
             rowType = `default`;
             actionCell = completeButton + trashButton;
+            completeCell = '';
+        } else {
+            rowType = `success`;
+            let dateCompleted = new Date(taskArray[i].date_completed ).toLocaleDateString();
+            completeCell = `<img id="checkComplete" src=${largeCheckImage}>${dateCompleted}`;
+            actionCell = completeButton;
         }
         appendString += `<tr class="table-${rowType}"><td>${taskArray[i].task_name}</td>
                         <td>${taskArray[i].assigned_to}</td>
                         <td>${dateCreated}</td>
                         <td>${completeCell}</td>
                         <td>${actionCell}</td>`;
+
     }
     appendString += `</tbody></table>`;
     return appendString;
 }
 function createTaskObject() {
+    console.log( `task name is:`, $( '#task' ).val() );
+    console.log( `assigned to is:`, $( '#assigned' ).val() );
     let taskObject = {
-        taskName : $( '#taskName' ).val(),
-        dateCreated: $( '#dateCreated' ).val(),
-        dateCompleted: $( '#dateCompleted' ).val(),
-        assignedTo: $( '#assignedTo' ).val()
+        taskName : $( '#task' ).val(),
+        assignedTo: $( '#assigned' ).val(),
+        dateCreated: new Date().toLocaleDateString(),
+        dateCompleted: ''
     };
-    return taskObject
+    console.log( `taskObject:`, taskObject );
+    return taskObject;
+}
+function clearInput() {
+    $( '#task' ).val('');
+    $( '#assigned' ).val('');
 }

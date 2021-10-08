@@ -1,5 +1,10 @@
 body {
     font-family: 'Urbanist', sans-serif;
+    background-color:rgba(32, 97, 69, 0.105);
+}
+.container {
+    background-color: white;
+    border-radius: 10px 10px 10px 10px;
 }
 #title {
     font-weight: bolder;

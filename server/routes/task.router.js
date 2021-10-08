@@ -18,10 +18,21 @@ taskRouter.get( '/', ( req, res )=>{
         res.sendStatus( 500 );
     });
 });
-
 // POST
+taskRouter.post( '/', ( req, res )=>{
+    console.log( 'in POST on server' );
+    const queryString = `INSERT INTO tasks (task_name, assigned_to, date_created )
+                         VALUES($1, $2, $3)`;
 
-
+    let values = [req.body.taskName, req.body.assignedTo, req.body.dateCreated];
+    console.log( `queryString is:`, queryString );
+    console.log( `values are:`, values );
+    pool.query( queryString, values ).then( ( results )=>{
+        res.sendStatus( 201 );
+    }).catch( ( error )=>{
+        res.sendStatus( 500) ;
+    })
+});
 // PUT
 
 
