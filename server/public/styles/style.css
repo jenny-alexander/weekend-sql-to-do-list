@@ -2,20 +2,6 @@ body {
     font-family: 'Urbanist', sans-serif;
     background-color:rgba(32, 97, 69, 0.105);
 }
-.container {
-    background-color: white;
-    border-radius: 10px 10px 10px 10px;
-}
-#title {
-    font-weight: bolder;
-}
-#checkComplete {
-    margin-right: 13px;
-}
-.bg-forestGreen {
-    background-color:rgb(7, 85, 61); 
-    color: white;
-}
 thead {
     font-size: 20px;
 }
@@ -24,4 +10,18 @@ tr {
 }
 td {
     background-color: white;
+}
+.container {
+    background-color: white;
+    border-radius: 10px 10px 10px 10px;
+}
+.bg-forestGreen {
+    background-color:rgb(7, 85, 61); 
+    color: white;
+}
+#title {
+    font-weight: bolder;
+}
+#checkComplete {
+    margin-right: 13px;
 }

@@ -5,6 +5,7 @@ function setupClickListeners() {
     //load screen with db records
     getTasks();
     $( '#addTaskButton' ).on( 'click', addTask );
+    $( '#outputDiv' ).on( 'click', '#removeTaskButton', removeTask )
 }
 function addTask() {
     console.log( `in addTask` );
@@ -40,6 +41,22 @@ function getTasks() {
         alert('Error getting tasks - see console'); //TODO - change to sweet alert
     });
 }
+function removeTask() {
+    console.log( `in removeTask and the id is:`, $( this ).parent().parent().data( 'id' ) );
+    //id is on the <tr> element which is the "grandparent" of the button
+    let idOfTask = $( this ).parent().parent().data( 'id' );
+
+    $.ajax({
+        method: 'DELETE',
+        url: '/tasks?id=' + idOfTask
+    }).then( function ( response ) {
+        console.log( 'remove task', response );
+        getTasks();
+    }).catch( function ( error ) {
+        console.log( `error with delete`, error );
+        alert( `Oops! There was an error with your delete. Check console for details.` );
+    })
+}
 function createTableOutput( taskArray ) {
     let rowType = '';
     let completeCell = '';
@@ -48,9 +65,9 @@ function createTableOutput( taskArray ) {
     let trashImage = `"../images/trash.svg" alt="trash" width="15" height="15"`;
     let checkImage = `"../images/check-lg.svg" alt="complete" width="15" height="15"`;
     let largeCheckImage = `"../images/check-lg.svg" alt="complete" width="18" height="18"`;
-    let completeButton = `<button class="btn btn-default btn-outline-success mr-1">
+    let completeButton = `<button class="btn btn-default btn-outline-success mr-1" id="completeTaskButton">
                           <img src=${checkImage}></button>`;
-    let trashButton = `<button class="btn btn-default btn-outline-danger">
+    let trashButton = `<button class="btn btn-default btn-outline-danger" id="removeTaskButton">
                        <img src=${trashImage}></button>`;
 
     //Creating this part of the table (table class, headers) doesn't change.
@@ -68,9 +85,9 @@ function createTableOutput( taskArray ) {
             rowType = `success`;
             let dateCompleted = new Date(taskArray[i].date_completed ).toLocaleDateString();
             completeCell = `<img id="checkComplete" src=${largeCheckImage}>${dateCompleted}`;
-            actionCell = completeButton;
+            actionCell = trashButton;
         }
-        appendString += `<tr class="table-${rowType}"><td>${taskArray[i].task_name}</td>
+        appendString += `<tr class="table-${rowType}" data-id="${taskArray[i].id}"><td>${taskArray[i].task_name}</td>
                         <td>${taskArray[i].assigned_to}</td>
                         <td>${dateCreated}</td>
                         <td>${completeCell}</td>

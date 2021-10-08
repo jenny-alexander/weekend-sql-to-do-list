@@ -25,8 +25,6 @@ taskRouter.post( '/', ( req, res )=>{
                          VALUES($1, $2, $3)`;
 
     let values = [req.body.taskName, req.body.assignedTo, req.body.dateCreated];
-    console.log( `queryString is:`, queryString );
-    console.log( `values are:`, values );
     pool.query( queryString, values ).then( ( results )=>{
         res.sendStatus( 201 );
     }).catch( ( error )=>{
@@ -37,5 +35,15 @@ taskRouter.post( '/', ( req, res )=>{
 
 
 // DELETE
+taskRouter.delete( '/', ( req, res )=>{
+    console.log( `in delete` );
+    const queryString = `DELETE FROM tasks WHERE id=${req.query.id}`;
+    pool.query( queryString ).then( ( results )=>{
+        res.sendStatus( 200 );
+    }).catch( ( error )=>{
+        console.log( error );
+        res.sendStatus( 500 );
+    })
+})
 
 module.exports = taskRouter;
