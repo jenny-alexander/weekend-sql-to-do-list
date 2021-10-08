@@ -19,57 +19,67 @@
         <!-- Add image here, if needed-->     
     </header>
     <div class="container mt-2 border border-dark rounded">
-        <p id="title" class="display-4 mt-4 text-center mb-4">To-do List</p>
-        <div id="mainDiv">
-        <div class="row p-2">
-            <div class="col-10 p-2">
-                <label class="sr-only" for="taskName">Task Name</label>
-                <input type="text" class="form-control" id="taskName" placeholder="Enter Task Name" name="taskName">
-            </div>
-            <div class="col-2 p-2">
-                <button id="addTaskButton" class="btn btn-outline-dark">Add Task</button>
-            </div>
-        </div> <!-- row div -->
-
+        <p id="title" class="h1 mt-4 text-center mb-4">To-do List</p>
+        <div id="inputDiv">
+            <div class="row p-2">
+                <div class="col-10 p-2">
+                    <label class="sr-only" for="taskName">Task Name</label>
+                    <input type="text" class="form-control" id="taskName" placeholder="Enter Task Name" name="taskName">
+                </div>
+                <div class="col-2 p-2">
+                    <button id="addTaskButton" class="btn btn-outline-success">Add Task</button>
+                </div>
+            </div> <!-- row div -->
+        </div> <!-- inputDiv div -->
         <!-- Table time...or should we use something else?-->
-        <table class="table table-striped table-bordered">
-            <thead>
-              <tr>
-                <th>Task</th>
-                <th>Completed</th>
-                <th>Date Completed</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr class="table-success">
-                <td>Walk Samson around the block</td>
-                <td>Yes</td>
-                <td>2021-10-06</td>
-                <td>
-                    <button class="btn btn-default btn-outline-dark">
-                        <img src="./images/trash.svg" alt="trash" width="15" height="15">
-                    </button>
-                </td>
-              </tr>
-              <tr>
-                <td>Vacuum the main floor</td>
-                <td>No</td>
-                <td></td>
-                <td>
-                    <!-- <button class="btn btn-outline-dark">Complete</button>
-                    <button class="btn btn-outline-dark">Delete</button> -->
-                    <button class="btn btn-default btn-outline-dark mr-1">
-                        <img src="./images/check-lg.svg" alt="complete" width="15" height="15">
-                    </button>
-                    <button class="btn btn-default btn-outline-dark">
-                        <img src="./images/trash.svg" alt="trash" width="15" height="15">
-                    </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>        
-        </div> <!-- mainDiv -->
+        <div id="</div>">
+            <!-- <table class="table table-bordered">
+                <thead class="table-header bg-forestGreen">
+                <tr>
+                    <th>Task</th>
+                    <th>Completed</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="table-success">
+                    <td>Walk Samson around the block</td>
+                    <td>
+                        <img src="./images/check-lg.svg" alt="complete" width="18" height="18">
+                    </td>
+                    <td>
+                        <button class="btn btn-default btn-outline-danger">
+                            <img src="./images/trash.svg" alt="trash" width="15" height="15">
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Vacuum the main floor</td>
+                    <td>No</td>
+                    <td>
+                        <button class="btn btn-default btn-outline-success mr-1">
+                            <img src="./images/check-lg.svg" alt="complete" width="15" height="15">
+                        </button>
+                        <button class="btn btn-default btn-outline-danger">
+                            <img src="./images/trash.svg" alt="trash" width="15" height="15">
+                        </button>
+                    </td>                
+                </tr>
+                <tr>
+                    <td>Pickup Ben @ 3:00 pm and bring to XC meet in Hopkins</td>
+                    <td>No</td>
+                    <td>
+                        <button class="btn btn-default btn-outline-success mr-1">
+                            <img src="./images/check-lg.svg" alt="complete" width="15" height="15">
+                        </button>
+                        <button class="btn btn-default btn-outline-danger">
+                            <img src="./images/trash.svg" alt="trash" width="15" height="15">
+                        </button>
+                    </td>
+                </tr>              
+                </tbody>
+            </table>         -->
+          </div> <!--outputDiv div-->
     </div> <!-- bootstrap container div-->
 </body>
 </html>

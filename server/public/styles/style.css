@@ -1,6 +1,19 @@
 body {
     font-family: 'Urbanist', sans-serif;
 }
-#mainDiv {
-    font-size: larger;
+#title {
+    font-weight: bolder;
+}
+.bg-forestGreen {
+    background-color:rgb(7, 85, 61); 
+    color: white;
+}
+thead {
+    font-size: 20px;
+}
+tr {
+    font-size: 18px;
+}
+td {
+    background-color: white;
 }
