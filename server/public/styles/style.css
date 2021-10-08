@@ -4,6 +4,9 @@ body {
 #title {
     font-weight: bolder;
 }
+#checkComplete {
+    margin-right: 13px;
+}
 .bg-forestGreen {
     background-color:rgb(7, 85, 61); 
     color: white;

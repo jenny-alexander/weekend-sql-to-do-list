@@ -1,14 +1,14 @@
-const { query } = require('express');
+// const { query } = require('express');
 const express = require('express');
-const todoRouter = express.Router();
+const taskRouter = express.Router();
 
 // DB CONNECTION
 const pool = require( '../modules/pool.js' );
 
 // GET
-todoRouter.get( '/', ( req, res )=>{
+taskRouter.get( '/', ( req, res )=>{
     console.log( `in GET on server` );
-    const queryString = `SELECT * FROM tasks`;
+    const queryString = `SELECT * FROM tasks ORDER BY id`;
 
     pool.query( queryString ).then( ( results ) => {
         res.send( results.rows );
@@ -27,4 +27,4 @@ todoRouter.get( '/', ( req, res )=>{
 
 // DELETE
 
-module.exports = todoRouter;
+module.exports = taskRouter;
