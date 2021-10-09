@@ -2,23 +2,30 @@ $( function() {
     setupClickListeners();
 });
 function setupClickListeners() {
+    //initialize all tooltips on the page
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+      })
+
     getTasks();
     $( '#addTaskButton' ).on( 'click', addTask );
     $( '#outputDiv' ).on( 'click', '#removeTaskButton', removeTask );
     $( '#outputDiv' ).on( 'click', '#completeTaskButton', updateTask );
 }
 function addTask() {
-    let taskToSend = createTaskObject();
-    $.ajax({
-        method: 'POST',
-        url: '/tasks',
-        data: taskToSend
-    }).then( function ( response ){
-        getTasks();
-    }).catch( function ( err ){
-        console.log( err );
-        alert( `Oops! There was an error getting the tasks. Check console for details.` );
-    })
+    if ( $( '#task' ).val() ) {
+        let taskToSend = createTaskObject();
+        $.ajax({
+            method: 'POST',
+            url: '/tasks',
+            data: taskToSend
+        }).then( function ( response ){
+            getTasks();
+        }).catch( function ( err ){
+            console.log( err );
+            alert( `Oops! There was an error getting the tasks. Check console for details.` );
+        })
+    }
 }
 function getTasks() {
     $.ajax({
@@ -56,7 +63,7 @@ function removeTask() {
                 method: 'DELETE',
                 url: '/tasks?id=' + idOfTask
             }).then( function ( response ) {
-                // Swal.fire('Deleted!', '', 'success')
+                Swal.fire('Task deleted!', '', 'success')
                 getTasks();
             }).catch( function ( error ) {
                 console.log( `error with delete`, error );
@@ -96,7 +103,7 @@ function createTableOutput( taskArray ) {
 
     //Creating this part of the table (table class, headers) doesn't change.
     let appendString = `<table class="table"><thead class="table-header bg-forestGreen">
-                        <tr><th>Task</th><th>AssignedTo</th><th>Date Created</th>
+                        <tr><th>Task</th><th>Assigned To</th><th>Date Created</th>
                         <th>Date Completed</th><th>Actions</th></tr></thead><tbody>`;
                         
     for ( let i = 0; i < taskArray.length; i++ ) {

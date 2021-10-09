@@ -39,7 +39,19 @@ We would recommend you spend some time thinking about how to approach this probl
 
 ### Database Structure
 
-[ ]Please include a `database.sql` text file in your repo that includes all of your `CREATE TABLE` queries. This is so we can re-create your database while testing your app.
+[x]Please include a `database.sql` text file in your repo that includes all of your `CREATE TABLE` queries. This is so we can re-create your database while testing your app.
+
+### Bugs + other 'nice-to-have'
+
+[x] Bug #1 -> Validate that task name is NOT empty.
+[x] Bug #2 -> Add space in AssignedTo column header.
+[] Bug #3 -> Add 'completed' column to DB and modify code to use it
+[] Allow user to edit 'task name' & 'assigned to' fields:
+  [] Add action button with pencil (when task is not complete)
+  [] When user clicks on the edit button, a popup will appear with 'task name' and 'assigned to' already populated
+  [] Update PUT query string to update more than 1 value
+[] Add image and 'catchier' name to list (ideas: Honeydew List OR Busybee List)
+[] Add tooltip to trash and checkmark buttons.
 
 ## Stretch Goals
 
@@ -54,7 +66,7 @@ For each of your strech goals, you will be practicing git branching. Please refe
 
 * `feature-confirm-delete`
 
-  * [ ]  In whatever fashion you would like, create an 'are you sure: yes / no' option when deleting a task.
+  * [x]  In whatever fashion you would like, create an 'are you sure: yes / no' option when deleting a task.
         - Some styled options are [Bootstrap Modal](https://getbootstrap.com/docs/4.0/components/modal/) or [Sweet Alerts](https://sweetalert.js.org/guides/): Use the CDN option.
 
 * `feature-ordering-task-query` 
