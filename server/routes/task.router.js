@@ -10,7 +10,6 @@ taskRouter.get( '/', ( req, res )=>{
     const queryString = `SELECT * FROM tasks ORDER BY id;`;
     pool.query( queryString ).then( ( results ) => {
         res.send( results.rows );
-        console.log( `results.rows is:`, results.rows );
     }).catch( ( err ) => {
         console.log( `GET error is:`, err );
         res.sendStatus( 500 );

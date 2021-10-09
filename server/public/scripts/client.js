@@ -2,7 +2,6 @@ $( function() {
     setupClickListeners();
 });
 function setupClickListeners() {
-    //load screen with db records
     getTasks();
     $( '#addTaskButton' ).on( 'click', addTask );
     $( '#outputDiv' ).on( 'click', '#removeTaskButton', removeTask );
@@ -42,14 +41,28 @@ function removeTask() {
     //id is on the <tr> element which is the "grandparent" of the button
     let idOfTask = $( this ).parent().parent().data( 'id' );
 
-    $.ajax({
-        method: 'DELETE',
-        url: '/tasks?id=' + idOfTask
-    }).then( function ( response ) {
-        getTasks();
-    }).catch( function ( error ) {
-        console.log( `error with delete`, error );
-        alert( `Oops! There was an error deleting the task. Check console for details.` );
+    //Show Sweet Alert(2) popup box. If user chooses yes, then continue saving to DB. If no, then don't do anything.
+    Swal.fire({
+        title: 'Do you want to delete the task?',
+        showDenyButton: true,
+        showCancelButton: false,
+        confirmButtonText: 'Yes',
+        confirmButtonColor: '#4CAF50',
+        denyButtonText: `No`,
+        denyButtonColor: '#78808C',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                method: 'DELETE',
+                url: '/tasks?id=' + idOfTask
+            }).then( function ( response ) {
+                // Swal.fire('Deleted!', '', 'success')
+                getTasks();
+            }).catch( function ( error ) {
+                console.log( `error with delete`, error );
+                alert( `Oops! There was an error deleting the task. Check console for details.` );
+            })
+        }
     })
 }
 function updateTask() {
