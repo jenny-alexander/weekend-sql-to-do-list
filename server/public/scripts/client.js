@@ -10,15 +10,15 @@ function setupClickListeners() {
     getTasks();
     $( '#addTaskButton' ).on( 'click', addTask );
     $( '#outputDiv' ).on( 'click', '#removeTaskButton', removeTask );
-    $( '#outputDiv' ).on( 'click', '#completeTaskButton', updateTask );
+    $( '#outputDiv' ).on( 'click', '#completeTaskButton', completeTask );
+    $( '#outputDiv' ).on( 'click', '#editTaskButton', editTask );
 }
 function addTask() {
     if ( $( '#task' ).val() ) {
-        let taskToSend = createTaskObject();
         $.ajax({
             method: 'POST',
             url: '/tasks',
-            data: taskToSend
+            data: createTaskObject()
         }).then( function ( response ){
             getTasks();
         }).catch( function ( err ){
@@ -72,15 +72,16 @@ function removeTask() {
         }
     })
 }
-function updateTask() {
+function completeTask() {
     let taskToUpdate = $( this ).parent().parent().data( 'id' );
-    let todayDate = new Date().toISOString().slice( 0,10 );
+    let todayDate = new Date().toISOString(); //send UTC to database
 
-    $.ajax({
+    $.ajax({        
         method: 'PUT',
         url: `/tasks?id=${taskToUpdate}`,
         //data: 'date_completed=10/08/2021'
-        data: 'date_completed='+todayDate
+         //data: 'date_completed='+todayDate
+         data: `completed=true&date_completed=${todayDate}`
     }).then( function ( response ) {
         getTasks();
     }).catch( function ( error ){
@@ -88,40 +89,47 @@ function updateTask() {
         alert( `Oops! There was an error completing the task. Check console for details.` );
     })
 }
+function editTask() {
+    console.log( `in editTask` );
+}
 function createTableOutput( taskArray ) {
     let rowType = '';
-    let completeCell = '';
+    let completedCell = '';
+    let completedDateCell = '';
     let actionCell = '';
-    let dateCreated = '';
+    // let dateCreated = '';
+    let editImage = `"../images/pencil.svg" alt="edit" width="15" height="15"`;
     let trashImage = `"../images/trash.svg" alt="trash" width="15" height="15"`;
     let checkImage = `"../images/check-lg.svg" alt="complete" width="15" height="15"`;
     let largeCheckImage = `"../images/check-lg.svg" alt="complete" width="18" height="18"`;
-    let completeButton = `<button class="btn btn-default btn-outline-success mr-1" id="completeTaskButton">
+    let editButton = `<button class="btn btn-default btn-outline-secondary mr-3" id="editTaskButton">
+                      <img src=${editImage}></button>`;
+    let completeButton = `<button class="btn btn-default btn-outline-success mr-3" id="completeTaskButton">
                           <img src=${checkImage}></button>`;
     let trashButton = `<button class="btn btn-default btn-outline-danger" id="removeTaskButton">
                        <img src=${trashImage}></button>`;
 
     //Creating this part of the table (table class, headers) doesn't change.
     let appendString = `<table class="table"><thead class="table-header bg-forestGreen">
-                        <tr><th>Task</th><th>Assigned To</th><th>Date Created</th>
+                        <tr><th>Task</th><th>Assigned To</th><th>Completed</th>
                         <th>Date Completed</th><th>Actions</th></tr></thead><tbody>`;
                         
     for ( let i = 0; i < taskArray.length; i++ ) {
-        dateCreated = new Date( taskArray[i].date_created ).toLocaleDateString();
-        if ( taskArray[i].date_completed == null ) {
-            rowType = `default`;
-            actionCell = completeButton + trashButton;
-            completeCell = '';
-        } else {
+        if ( taskArray[i].completed ) {
             rowType = `success`;
-            let dateCompleted = new Date(taskArray[i].date_completed ).toLocaleDateString();
-            completeCell = `<img id="checkComplete" src=${largeCheckImage}>${dateCompleted}`;
-            actionCell = trashButton;
+            completedCell = `<img id="checkComplete" src=${largeCheckImage}></img>`;
+            completedDateCell = new Date(taskArray[i].date_completed ).toLocaleDateString();
+            actionCell = trashButton;            
+        } else {
+            rowType = `default`;            
+            completedCell = '';
+            completedDateCell = '';
+            actionCell = editButton + completeButton + trashButton;
         }
         appendString += `<tr class="table-${rowType}" data-id="${taskArray[i].id}"><td>${taskArray[i].task_name}</td>
                         <td>${taskArray[i].assigned_to}</td>
-                        <td>${dateCreated}</td>
-                        <td>${completeCell}</td>
+                        <td>${completedCell}</td>
+                        <td>${completedDateCell}</td>
                         <td>${actionCell}</td>`;
 
     }
@@ -132,7 +140,8 @@ function createTaskObject() {
     let taskObject = {
         taskName : $( '#task' ).val(),
         assignedTo: $( '#assigned' ).val(),
-        dateCreated: new Date().toLocaleDateString(),
+        //dateCreated: new Date().toLocaleDateString(),
+        completed: false,
         dateCompleted: ''
     };
     return taskObject;
