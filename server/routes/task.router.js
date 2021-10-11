@@ -7,7 +7,15 @@ const pool = require( '../modules/pool.js' );
 
 // GET
 taskRouter.get( '/', ( req, res )=>{
-    const queryString = `SELECT * FROM tasks ORDER BY id;`;
+    let queryString = '';
+    
+    //Get the sort parameter from req.query and use it to create the queryString variable.
+    if ( req.query.sort ) {
+        queryString = `SELECT * FROM tasks ORDER BY ` + req.query.sort + `;`;
+    } else {
+        queryString = `SELECT * FROM tasks;`;
+    }
+
     pool.query( queryString ).then( ( results ) => {
         res.send( results.rows );
     }).catch( ( err ) => {
@@ -29,8 +37,6 @@ taskRouter.post( '/', ( req, res )=>{
 });
 // PUT (update record in DB)
 taskRouter.put( '/', ( req, res )=>{
-    console.log( `in PUT on server with req.body=`, req.body );
-    console.log( `in PUT on server with req.query=`, req.query);
     //dynamically get values that will be updated from req.body since we don't know 
     let queryString = `UPDATE tasks SET `;
     //loop through the object values and corresponding keys by using Object.keys & Object.values functionality
@@ -49,7 +55,6 @@ taskRouter.put( '/', ( req, res )=>{
     queryString += ` WHERE id = '${req.query.id}';`;    
 
     pool.query( queryString ).then( ( results )=>{
-        console.log( `results say:`,results );
         res.sendStatus( 200 );
     }).catch( ( error )=>{
         console.log( error );

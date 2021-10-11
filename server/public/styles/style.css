@@ -26,3 +26,7 @@ td {
 #checkComplete {
     margin-right: 13px;
 }
+#sortExplanation {
+    font-size: 15px;
+    font-style: italic;
+}

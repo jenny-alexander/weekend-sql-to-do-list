@@ -22,7 +22,7 @@ function addTask() {
         }).then( function ( response ){
             getTasks();
         }).catch( function ( err ){
-            console.log( err );            
+            console.log( `error adding task:`, err );            
             Swal.fire({
             icon: 'error',
             title: 'Oops, something went wrong!',
@@ -33,9 +33,11 @@ function addTask() {
     }
 }
 function getTasks() {
+    //Display most recently created tasks first (meaning the ones with the biggest ID number.
+    //This is done by appending a sort command to the url (which is really going into the query.params string).
     $.ajax({
         method: 'GET',
-        url: '/tasks'
+        url: '/tasks?sort=-id' //pass sort order here
     }).then( function ( response ){   
         //Check that response is not empty before continuing
         if ( response.length != 0 ) {
@@ -142,8 +144,6 @@ async function editTask() {
         }
       })      
       if (formValues) {
-        //Swal.fire(JSON.stringify(formValues))
-        console.log( formValues );
         //First, make sure user enters a task name
         if ( formValues[0] ) {
             //Check what was input by user and send to DB without checking to see if anything actually changed.
@@ -217,7 +217,8 @@ function createTableOutput( taskArray ) {
                         <td>${actionCell}</td>`;
 
     }
-    appendString += `</tbody></table>`;
+    appendString += `</tbody></table>
+    <p id="sortExplanation">*Tasks are displayed from most recently created to oldest. Also, once a task is completed, it can't be edited anymore.`;
     return appendString;
 }
 function createTaskObject() {
