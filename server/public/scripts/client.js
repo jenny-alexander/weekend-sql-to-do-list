@@ -126,6 +126,8 @@ async function editTask() {
           `<input id="swal-taskName" type="text" placeholder="${taskName}" class="swal2-input">` +
           `<input id="swal-assignedTo" type="text" placeholder="${assignedTo}" class="swal2-input">`,
             focusConfirm: false,
+            showCancelButton: true,
+            showCloseButton: true,
             //here we are grabbing the values entered by the user
             preConfirm: () => {
                 //since task name is mandatory on DB, check to make sure it was entered in popup
