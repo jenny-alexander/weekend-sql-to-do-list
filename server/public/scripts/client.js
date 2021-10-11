@@ -36,13 +36,7 @@ function getTasks() {
     $.ajax({
         method: 'GET',
         url: '/tasks'
-    }).then( function ( response ){
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops, something went wrong!',
-            text: 'There was an error getting the tasks.',
-             footer: 'Check console for details.'
-            })     
+    }).then( function ( response ){   
         //Check that response is not empty before continuing
         if ( response.length != 0 ) {
             let elViewTasks = $( '#outputDiv' );

@@ -41,16 +41,16 @@ We would recommend you spend some time thinking about how to approach this probl
 
 [x]Please include a `database.sql` text file in your repo that includes all of your `CREATE TABLE` queries. This is so we can re-create your database while testing your app.
 
-### Bugs + other 'nice-to-have'
+### Issues + other 'nice-to-have'
 
-[x] Bug #1 -> Validate that task name is NOT empty.
-[x] Bug #2 -> Add space in AssignedTo column header.
-[x] Bug #3 -> Add 'completed' column to DB and modify code to use it
+[x] Issue #1 -> Validate that task name is NOT empty.
+[x] Issue #2 -> Add space in AssignedTo column header.
+[x] Issue #3 -> Add 'completed' column to DB and modify code to use it
 [x] Allow user to edit 'task name' & 'assigned to' fields:
   [x] Add action button with pencil (when task is not complete)
   [x] When user clicks on the edit button, a popup will appear with 'task name' and 'assigned to' already populated
   [x] Update PUT query string to update more than 1 value
-[] Change 'alert' to Swal.fire (sweet alert)
+[x] Change 'alert' to Swal.fire (sweet alert)
 [] Add image and 'catchier' name to app
 [] Add tooltip to trash and checkmark buttons.
 
