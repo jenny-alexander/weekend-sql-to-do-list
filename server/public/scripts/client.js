@@ -22,8 +22,13 @@ function addTask() {
         }).then( function ( response ){
             getTasks();
         }).catch( function ( err ){
-            console.log( err );
-            alert( `Oops! There was an error getting the tasks. Check console for details.` );
+            console.log( err );            
+            Swal.fire({
+            icon: 'error',
+            title: 'Oops, something went wrong!',
+            text: 'There was an error adding the task.',
+             footer: 'Check console for details.'
+            })
         })
     }
 }
@@ -32,6 +37,12 @@ function getTasks() {
         method: 'GET',
         url: '/tasks'
     }).then( function ( response ){
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops, something went wrong!',
+            text: 'There was an error getting the tasks.',
+             footer: 'Check console for details.'
+            })     
         //Check that response is not empty before continuing
         if ( response.length != 0 ) {
             let elViewTasks = $( '#outputDiv' );
@@ -40,15 +51,20 @@ function getTasks() {
             clearInput();
         }
     }).catch( function( err ){
-        console.log( `error getting tasks:`, err );
-        alert( `Oops! There was an error adding the task. Check console for details.` ); //TODO - change to sweet alert
+        console.log( `error getting tasks:`, err );        
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops, something went wrong!',
+            text: 'There was an error getting the tasks.',
+             footer: 'Check console for details.'
+            })        
     });
 }
 function removeTask() {
     //id is on the <tr> element which is the "grandparent" of the button
     let idOfTask = $( this ).parent().parent().data( 'id' );
 
-    //Show Sweet Alert(2) popup box. If user chooses yes, then continue saving to DB. If no, then don't do anything.
+    //Show SweetAlert(2) popup box. If user chooses yes, then continue saving to DB. If no, then don't do anything.
     Swal.fire({
         title: 'Do you want to delete the task?',
         showDenyButton: true,
@@ -67,7 +83,12 @@ function removeTask() {
                 getTasks();
             }).catch( function ( error ) {
                 console.log( `error with delete`, error );
-                alert( `Oops! There was an error deleting the task. Check console for details.` );
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops, something went wrong!',
+                    text: 'There was an error removing the task.',
+                     footer: 'Check console for details.'
+                    })  
             })
         }
     })
@@ -86,35 +107,42 @@ function completeTask() {
         getTasks();
     }).catch( function ( error ){
         console.log( `error with update:`, error );
-        alert( `Oops! There was an error completing the task. Check console for details.` );
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops, something went wrong!',
+            text: 'There was an error completing the task.',
+             footer: 'Check console for details.'
+            })  
     })
 }
 async function editTask() {
-
     let grandparent = $( this ).parent().parent();
-    //Look for child element (<td>) of this specific row that has a salary. 
+    //Look for child element (<td>) of this specific row that has the 'task name' field
     let elTaskNode = grandparent.children( '#name' );
     let taskName = elTaskNode[0].textContent;
-
+    //Look for child element (<td>) of this specific row that has the 'assigned to' field
     let elAssignedNode = grandparent.children( '#assigned' );
     let assignedTo = elAssignedNode[0].textContent;   
 
+    //Display SweetAlert popup to user and allow the user to enter task name and assigned to
     const { value: formValues } = await Swal.fire({
         title: 'Edit task',
         html:
           `<label>Enter task name and assigned to:</label>` +
           `<input id="swal-taskName" type="text" placeholder="${taskName}" class="swal2-input">` +
           `<input id="swal-assignedTo" type="text" placeholder="${assignedTo}" class="swal2-input">`,
-        focusConfirm: false,
-        preConfirm: () => {
-            if ( document.getElementById('swal-taskName').value) {
-                return [
-                    document.getElementById('swal-taskName').value,
-                    document.getElementById('swal-assignedTo').value
-                ]
-            } else {
-                Swal.showValidationMessage('Task name missing!'); 
-            }
+            focusConfirm: false,
+            //here we are grabbing the values entered by the user
+            preConfirm: () => {
+                //since task name is mandatory on DB, check to make sure it was entered in popup
+                if ( document.getElementById('swal-taskName').value) {
+                    return [
+                        document.getElementById('swal-taskName').value,
+                        document.getElementById('swal-assignedTo').value
+                    ]
+                } else {                    
+                    Swal.showValidationMessage('Task name missing!'); 
+                }
         }
       })      
       if (formValues) {
@@ -141,7 +169,12 @@ async function editTask() {
                 getTasks();
             }).catch( function ( error ){
                 console.log( `error with update:`, error );
-                alert( `Oops! There was an error completing the task. Check console for details.` );
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops, something went wrong!',
+                    text: 'There was an error editing the task.',
+                    footer: 'Check console for details.'
+                    })  
             })            
         } 
       }  
