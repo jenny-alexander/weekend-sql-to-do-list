@@ -89,8 +89,62 @@ function completeTask() {
         alert( `Oops! There was an error completing the task. Check console for details.` );
     })
 }
-function editTask() {
-    console.log( `in editTask` );
+async function editTask() {
+
+    let grandparent = $( this ).parent().parent();
+    //Look for child element (<td>) of this specific row that has a salary. 
+    let elTaskNode = grandparent.children( '#name' );
+    let taskName = elTaskNode[0].textContent;
+
+    let elAssignedNode = grandparent.children( '#assigned' );
+    let assignedTo = elAssignedNode[0].textContent;   
+
+    const { value: formValues } = await Swal.fire({
+        title: 'Edit task',
+        html:
+          `<label>Enter task name and assigned to:</label>` +
+          `<input id="swal-taskName" type="text" placeholder="${taskName}" class="swal2-input">` +
+          `<input id="swal-assignedTo" type="text" placeholder="${assignedTo}" class="swal2-input">`,
+        focusConfirm: false,
+        preConfirm: () => {
+            if ( document.getElementById('swal-taskName').value) {
+                return [
+                    document.getElementById('swal-taskName').value,
+                    document.getElementById('swal-assignedTo').value
+                ]
+            } else {
+                Swal.showValidationMessage('Task name missing!'); 
+            }
+        }
+      })      
+      if (formValues) {
+        //Swal.fire(JSON.stringify(formValues))
+        console.log( formValues );
+        //First, make sure user enters a task name
+        if ( formValues[0] ) {
+            //Check what was input by user and send to DB without checking to see if anything actually changed.
+            //Build the data string to get sent to PUT method on server side.
+            //Get 'task name'.
+            let dataString = `task_name=${formValues[0]}`;
+            //get 'assigned to'
+            if ( formValues[1] ){
+                dataString += `&assigned_to=${formValues[1]}`
+            }
+            //id is on the <tr> element which is the "grandparent" of the button
+            let idOfTask = grandparent.data( 'id' );
+            $.ajax({        
+                method: 'PUT',
+                url: `/tasks?id=${idOfTask}`,
+                data: dataString
+            }).then( function ( response ) {
+                Swal.fire('Task updated!', '', 'success')
+                getTasks();
+            }).catch( function ( error ){
+                console.log( `error with update:`, error );
+                alert( `Oops! There was an error completing the task. Check console for details.` );
+            })            
+        } 
+      }  
 }
 function createTableOutput( taskArray ) {
     let rowType = '';
@@ -126,8 +180,9 @@ function createTableOutput( taskArray ) {
             completedDateCell = '';
             actionCell = editButton + completeButton + trashButton;
         }
-        appendString += `<tr class="table-${rowType}" data-id="${taskArray[i].id}"><td>${taskArray[i].task_name}</td>
-                        <td>${taskArray[i].assigned_to}</td>
+        appendString += `<tr class="table-${rowType}" data-id="${taskArray[i].id}">
+                        <td id="name">${taskArray[i].task_name}</td>
+                        <td id="assigned">${taskArray[i].assigned_to}</td>
                         <td>${completedCell}</td>
                         <td>${completedDateCell}</td>
                         <td>${actionCell}</td>`;

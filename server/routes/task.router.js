@@ -1,4 +1,3 @@
-// const { query } = require('express');
 const { query } = require('express');
 const express = require('express');
 const taskRouter = express.Router();
@@ -30,14 +29,17 @@ taskRouter.post( '/', ( req, res )=>{
 });
 // PUT (update record in DB)
 taskRouter.put( '/', ( req, res )=>{
+    console.log( `in PUT on server with req.body=`, req.body );
+    console.log( `in PUT on server with req.query=`, req.query);
     //dynamically get values that will be updated from req.body since we don't know 
     let queryString = `UPDATE tasks SET `;
     //loop through the object values and corresponding keys by using Object.keys & Object.values functionality
     for ( let i = 0; i < Object.keys(req.body).length; i++ ) {
         let key = Object.keys(req.body)[i];
         let value = Object.values(req.body)[i];
-        //If the value is a date, add a single quote around it (necessary for DB update to work)
-        if ( key.includes('date') ) {
+        
+        //If the value is type 'string', add single quotes around it (necessary for DB update to work)
+        if ( typeof value == 'string' ) {
             value = "'" + value + "'";
         }
         queryString += `${key} = ${value},`
