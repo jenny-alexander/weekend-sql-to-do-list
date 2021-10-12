@@ -2,11 +2,6 @@ $( function() {
     setupClickListeners();
 });
 function setupClickListeners() {
-    //initialize all tooltips on the page
-    $(function () {
-        $('[data-toggle="tooltip"]').tooltip()
-      })
-
     getTasks();
     $( '#addTaskButton' ).on( 'click', addTask );
     $( '#outputDiv' ).on( 'click', '#removeTaskButton', removeTask );
@@ -32,20 +27,17 @@ function addTask() {
         })
     }
 }
-function getTasks() {
-    //Display most recently created tasks first (meaning the ones with the biggest ID number.
-    //This is done by appending a sort command to the url (which is really going into the query.params string).
+function getTasks() {   
+    //Display most recently created tasks first (meaning the ones with the biggest ID number).
+    //This is done by appending a sort command to the url.
     $.ajax({
         method: 'GET',
         url: '/tasks?sort=-id' //pass sort order here
     }).then( function ( response ){   
-        //Check that response is not empty before continuing
-        if ( response.length != 0 ) {
-            let elViewTasks = $( '#outputDiv' );
-            elViewTasks.empty();
-            elViewTasks.append( createTableOutput( response ) );
-            clearInput();
-        }
+        let elViewTasks = $( '#outputDiv' );
+        elViewTasks.empty();
+        elViewTasks.append( createTableOutput( response ) );
+        clearInput();
     }).catch( function( err ){
         console.log( `error getting tasks:`, err );        
         Swal.fire({
@@ -75,8 +67,19 @@ function removeTask() {
                 method: 'DELETE',
                 url: '/tasks?id=' + idOfTask
             }).then( function ( response ) {
-                Swal.fire('Task deleted!', '', 'success')
-                getTasks();
+                Swal.fire({
+                    title: 'Success!',
+                    text: "Task deleted!",
+                    icon: 'success',
+                    showCancelButton: false,
+                    showCloseButton: true,
+                    confirmButtonColor: '#3da133',
+                    confirmButtonText: 'Ok!'
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                        getTasks();
+                    }
+                  })                
             }).catch( function ( error ) {
                 console.log( `error with delete`, error );
                 Swal.fire({
@@ -180,7 +183,6 @@ function createTableOutput( taskArray ) {
     let completedCell = '';
     let completedDateCell = '';
     let actionCell = '';
-    // let dateCreated = '';
     let editImage = `"../images/pencil.svg" alt="edit" width="15" height="15"`;
     let trashImage = `"../images/trash.svg" alt="trash" width="15" height="15"`;
     let checkImage = `"../images/check-lg.svg" alt="complete" width="15" height="15"`;
@@ -193,7 +195,7 @@ function createTableOutput( taskArray ) {
                        <img src=${trashImage}></button>`;
 
     //Creating this part of the table (table class, headers) doesn't change.
-    let appendString = `<table class="table"><thead class="table-header bg-forestGreen">
+    let appendString = `<table class="table table-sm"><caption>List of tasks</caption><thead class="table-header bg-forestGreen">
                         <tr><th>Task</th><th>Assigned To</th><th>Completed</th>
                         <th>Date Completed</th><th>Actions</th></tr></thead><tbody>`;
                         
@@ -201,7 +203,9 @@ function createTableOutput( taskArray ) {
         if ( taskArray[i].completed ) {
             rowType = `success`;
             completedCell = `<img id="checkComplete" src=${largeCheckImage}></img>`;
-            completedDateCell = new Date(taskArray[i].date_completed ).toLocaleDateString();
+            let options = {hour: "2-digit", minute: "2-digit"};
+            completedDateCell = new Date(taskArray[i].date_completed ).toLocaleDateString() + ' ' +
+                                new Date(taskArray[i].date_completed ).toLocaleTimeString( `en-US`, options );
             actionCell = trashButton;            
         } else {
             rowType = `default`;            
@@ -214,18 +218,17 @@ function createTableOutput( taskArray ) {
                         <td id="assigned">${taskArray[i].assigned_to}</td>
                         <td>${completedCell}</td>
                         <td>${completedDateCell}</td>
-                        <td>${actionCell}</td>`;
+                        <td>${actionCell}</td>
+                        </tr>`;
 
     }
-    appendString += `</tbody></table>
-    <p id="sortExplanation">*Tasks are displayed from most recently created to oldest. Also, once a task is completed, it can't be edited anymore.`;
+    appendString += `</tbody></table>`;
     return appendString;
 }
 function createTaskObject() {
     let taskObject = {
         taskName : $( '#task' ).val(),
         assignedTo: $( '#assigned' ).val(),
-        //dateCreated: new Date().toLocaleDateString(),
         completed: false,
         dateCompleted: ''
     };
@@ -234,4 +237,5 @@ function createTaskObject() {
 function clearInput() {
     $( '#task' ).val('');
     $( '#assigned' ).val('');
+    $( '#task' ).focus();
 }

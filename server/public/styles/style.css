@@ -20,13 +20,13 @@ td {
     background-color:rgb(7, 85, 61); 
     color: white;
 }
+#sortExplanation {
+    font-size: 15px;
+    font-style: italic;
+}
 #title {
     font-weight: bolder;
 }
 #checkComplete {
     margin-right: 13px;
-}
-#sortExplanation {
-    font-size: 15px;
-    font-style: italic;
 }
