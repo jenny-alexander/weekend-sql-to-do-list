@@ -13,8 +13,7 @@ td {
 }
 .container {
     background-color: white;
-    border-radius: 10px 10px 10px 10px;
-    padding-bottom: 5px;
+    border-radius: 30px;
 }
 .bg-forestGreen {
     background-color:rgb(7, 85, 61); 

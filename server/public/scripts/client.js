@@ -195,7 +195,7 @@ function createTableOutput( taskArray ) {
                        <img src=${trashImage}></button>`;
 
     //Creating this part of the table (table class, headers) doesn't change.
-    let appendString = `<table class="table table-sm"><caption>List of tasks</caption><thead class="table-header bg-forestGreen">
+    let appendString = `<table class="table table-sm border-bottom"><caption>List of tasks</caption><thead class="table-header bg-forestGreen">
                         <tr><th>Task</th><th>Assigned To</th><th>Completed</th>
                         <th>Date Completed</th><th>Actions</th></tr></thead><tbody>`;
                         
