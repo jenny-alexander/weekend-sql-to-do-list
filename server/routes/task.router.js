@@ -39,6 +39,7 @@ taskRouter.post( '/', ( req, res )=>{
 taskRouter.put( '/', ( req, res )=>{
     //dynamically get values that will be updated from req.body since we don't know 
     let queryString = `UPDATE tasks SET `;
+    console.log( req.body );
     //loop through the object values and corresponding keys by using Object.keys & Object.values functionality
     for ( let i = 0; i < Object.keys(req.body).length; i++ ) {
         let key = Object.keys(req.body)[i];
@@ -50,6 +51,7 @@ taskRouter.put( '/', ( req, res )=>{
         }
         queryString += `${key} = ${value},`
     }
+    console.log(queryString);
     //get rid of the extra ',' at the end of queryString
     queryString = queryString.slice(0, queryString.length-1 ) 
     queryString += ` WHERE id = '${req.query.id}';`;    

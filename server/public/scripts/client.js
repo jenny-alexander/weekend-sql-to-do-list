@@ -152,13 +152,13 @@ async function editTask() {
             //here we are grabbing the values entered by the user
             preConfirm: () => {
                 //since task name is mandatory on DB, check to make sure it was entered in popup
-                if ( document.getElementById('swal-taskName').value) {
+                if ( document.getElementById( 'swal-taskName').value ) {
                     return [
-                        document.getElementById('swal-taskName').value,
-                        document.getElementById('swal-assignedTo').value
+                        document.getElementById('swal-taskName' ).value,                        
+                        document.getElementById('swal-assignedTo' ).value                        
                     ]
                 } else {                    
-                    Swal.showValidationMessage('Task name missing!'); 
+                    Swal.showValidationMessage( 'Task name missing!' ); 
                 }
         }
       })      
@@ -167,8 +167,10 @@ async function editTask() {
         if ( formValues[0] ) {
             //Check what was input by user and send to DB without checking to see if anything actually changed.
             //Build the data string to get sent to PUT method on server side.
-            //Get 'task name'.
-            let dataString = `task_name=${formValues[0]}`;
+
+            //Get 'task name'. Use the 'encodeURIComponent' javascript function to make sure that the 
+            //ampersand (&) is handled correctly by the POST route on the server.
+            let dataString =  `task_name=${encodeURIComponent(formValues[0])}`;
             //get 'assigned to'
             if ( formValues[1] ){
                 dataString += `&assigned_to=${formValues[1]}`
@@ -205,17 +207,18 @@ function createTableOutput( taskArray ) {
     let editImage = `"../images/pencil.svg" alt="edit" width="15" height="15"`;
     let trashImage = `"../images/trash.svg" alt="trash" width="15" height="15"`;
     let checkImage = `"../images/check-lg.svg" alt="complete" width="15" height="15"`;
-    let largeCheckImage = `"../images/check-lg.svg" alt="complete" width="18" height="18"`;
+    let notCompleteImage = `"../images/square.svg" alt="complete" width="18" height="18"`;
+    let completeImage = `"../images/check-square.svg" alt="complete" width="18" height="18"`;
     let editButton = `<button class="btn btn-default btn-outline-secondary mr-3" id="editTaskButton">
                       <img src=${editImage}></button>`;
-    let completeButton = `<button class="btn btn-default btn-outline-success mr-3" id="completeTaskButton">
+    let completeButton = `<button class="btn btn-default btn-outline-secondary mr-3" id="completeTaskButton">
                           <img src=${checkImage}></button>`;
-    let trashButton = `<button class="btn btn-default btn-outline-danger" id="removeTaskButton">
+    let trashButton = `<button class="btn btn-default btn-outline-secondary " id="removeTaskButton">
                        <img src=${trashImage}></button>`;
 
     //Create the static header row.
-    let appendString = `<table class="table table-sm border-bottom"><caption>List of tasks</caption><thead class="table-header bg-forestGreen">
-                        <tr><th>Task</th><th>Assigned To</th><th>Completed</th>
+    let appendString = `<table class="table table-sm"><caption>List of tasks</caption><thead class="table-header bg-forestGreen">
+                        <tr class="h4"><th>Completed</th><th>Task</th><th>Assigned To</th>
                         <th>Date Completed</th><th>Actions</th></tr></thead><tbody>`;
     
     //Loop through records from the database and create dynamic HTML output depending on the whether the task is complete or not.
@@ -224,7 +227,7 @@ function createTableOutput( taskArray ) {
             //If the task is complete, set the row background color to green, add a checkmark to the Completed column, 
             //display the date/time it was competed and only show the trash button under the Actions column.
             rowType = `success`;
-            completedCell = `<img id="checkComplete" src=${largeCheckImage}></img>`;
+            completedCell = `<img id="checkComplete" src=${completeImage}></img>`;
             let options = {hour: "2-digit", minute: "2-digit"};
             completedDateCell = new Date(taskArray[i].date_completed ).toLocaleDateString() + ' ' +
                                 new Date(taskArray[i].date_completed ).toLocaleTimeString( `en-US`, options );
@@ -233,14 +236,15 @@ function createTableOutput( taskArray ) {
             //If the task is not complete, set the background to default, leave the Completed and Date columns empty
             //and show the edit, complete and trash buttons under the Actions column.
             rowType = `default`;            
-            completedCell = '';
+            completedCell = `<img src=${notCompleteImage}></img>`;
             completedDateCell = '';
             actionCell = editButton + completeButton + trashButton;
         }
-        appendString += `<tr class="table-${rowType}" data-id="${taskArray[i].id}">
+        appendString += `<tr class="table-${rowType} h5" data-id="${taskArray[i].id}">
+                        <td>${completedCell}</td>                
                         <td id="name">${taskArray[i].task_name}</td>
                         <td id="assigned">${taskArray[i].assigned_to}</td>
-                        <td>${completedCell}</td>
+                        
                         <td>${completedDateCell}</td>
                         <td>${actionCell}</td>
                         </tr>`;
