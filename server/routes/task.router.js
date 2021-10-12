@@ -5,7 +5,7 @@ const taskRouter = express.Router();
 // DB CONNECTION
 const pool = require( '../modules/pool.js' );
 
-// GET
+// GET (get task records from database)
 taskRouter.get( '/', ( req, res )=>{
     let queryString = '';
     
@@ -23,7 +23,7 @@ taskRouter.get( '/', ( req, res )=>{
         res.sendStatus( 500 );
     });
 });
-// POST (Create new task record in DB)
+// POST (create new task record in DB)
 taskRouter.post( '/', ( req, res )=>{
     const queryString = `INSERT INTO tasks (task_name, assigned_to )
                          VALUES($1, $2);`;    
@@ -61,7 +61,7 @@ taskRouter.put( '/', ( req, res )=>{
         res.sendStatus( 500 );
     })
 })
-// DELETE
+// DELETE (delete record from DB)
 taskRouter.delete( '/', ( req, res )=>{
     const queryString = `DELETE FROM tasks WHERE id='${req.query.id}';`;
     pool.query( queryString ).then( ( results )=>{

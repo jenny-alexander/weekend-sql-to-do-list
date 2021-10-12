@@ -8,6 +8,9 @@ function setupClickListeners() {
     $( '#outputDiv' ).on( 'click', '#completeTaskButton', completeTask );
     $( '#outputDiv' ).on( 'click', '#editTaskButton', editTask );
 }
+/**
+ * Add the task to the database. If successful, update front-end table with all tasks from database.
+ */
 function addTask() {
     if ( $( '#task' ).val() ) {
         $.ajax({
@@ -27,6 +30,9 @@ function addTask() {
         })
     }
 }
+/**
+ * Get the tasks from the database and display them via a <table> element.
+ */
 function getTasks() {   
     //Display most recently created tasks first (meaning the ones with the biggest ID number).
     //This is done by appending a sort command to the url.
@@ -48,6 +54,9 @@ function getTasks() {
             })        
     });
 }
+/**
+ * Delete the task from the database. Then, perform a GET to retrieve all records from the database and display on front-end.
+ */
 function removeTask() {
     //id is on the <tr> element which is the "grandparent" of the button
     let idOfTask = $( this ).parent().parent().data( 'id' );
@@ -67,6 +76,7 @@ function removeTask() {
                 method: 'DELETE',
                 url: '/tasks?id=' + idOfTask
             }).then( function ( response ) {
+                //use sweetalert functionality
                 Swal.fire({
                     title: 'Success!',
                     text: "Task deleted!",
@@ -92,6 +102,10 @@ function removeTask() {
         }
     })
 }
+/**
+ * Complete the task. This means that the task was done. Update the database record (set completed = true)
+ * and add a timestamp equal to current UTC date/time. 
+ */
 function completeTask() {
     let taskToUpdate = $( this ).parent().parent().data( 'id' );
     let todayDate = new Date().toISOString(); //send UTC to database
@@ -99,8 +113,6 @@ function completeTask() {
     $.ajax({        
         method: 'PUT',
         url: `/tasks?id=${taskToUpdate}`,
-        //data: 'date_completed=10/08/2021'
-         //data: 'date_completed='+todayDate
          data: `completed=true&date_completed=${todayDate}`
     }).then( function ( response ) {
         getTasks();
@@ -114,6 +126,10 @@ function completeTask() {
             })  
     })
 }
+/**
+ * When the user clicks on the edit pencil button, a sweetalert popup appears allowing the user to enter a task
+ * name and assigned to. A task is only editable if it isn't complete. Save the changes to the database.
+ */
 async function editTask() {
     let grandparent = $( this ).parent().parent();
     //Look for child element (<td>) of this specific row that has the 'task name' field
@@ -178,6 +194,9 @@ async function editTask() {
         } 
       }  
 }
+/**
+* This function creates the HTML output for the table that displays the task data from the database.
+ */
 function createTableOutput( taskArray ) {
     let rowType = '';
     let completedCell = '';
@@ -194,13 +213,16 @@ function createTableOutput( taskArray ) {
     let trashButton = `<button class="btn btn-default btn-outline-danger" id="removeTaskButton">
                        <img src=${trashImage}></button>`;
 
-    //Creating this part of the table (table class, headers) doesn't change.
+    //Create the static header row.
     let appendString = `<table class="table table-sm border-bottom"><caption>List of tasks</caption><thead class="table-header bg-forestGreen">
                         <tr><th>Task</th><th>Assigned To</th><th>Completed</th>
                         <th>Date Completed</th><th>Actions</th></tr></thead><tbody>`;
-                        
+    
+    //Loop through records from the database and create dynamic HTML output depending on the whether the task is complete or not.
     for ( let i = 0; i < taskArray.length; i++ ) {
         if ( taskArray[i].completed ) {
+            //If the task is complete, set the row background color to green, add a checkmark to the Completed column, 
+            //display the date/time it was competed and only show the trash button under the Actions column.
             rowType = `success`;
             completedCell = `<img id="checkComplete" src=${largeCheckImage}></img>`;
             let options = {hour: "2-digit", minute: "2-digit"};
@@ -208,6 +230,8 @@ function createTableOutput( taskArray ) {
                                 new Date(taskArray[i].date_completed ).toLocaleTimeString( `en-US`, options );
             actionCell = trashButton;            
         } else {
+            //If the task is not complete, set the background to default, leave the Completed and Date columns empty
+            //and show the edit, complete and trash buttons under the Actions column.
             rowType = `default`;            
             completedCell = '';
             completedDateCell = '';
@@ -225,6 +249,9 @@ function createTableOutput( taskArray ) {
     appendString += `</tbody></table>`;
     return appendString;
 }
+/**
+ * Create the task object to send to the database.
+ */
 function createTaskObject() {
     let taskObject = {
         taskName : $( '#task' ).val(),
@@ -234,6 +261,10 @@ function createTaskObject() {
     };
     return taskObject;
 }
+/**
+ * Clear the task name and assigned to input fields.
+ * Set the cursor focus inside the task name input field.
+ */
 function clearInput() {
     $( '#task' ).val('');
     $( '#assigned' ).val('');
