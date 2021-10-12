@@ -1,0 +1,1 @@
+CREATE DATABASE weekend_to_do_app;

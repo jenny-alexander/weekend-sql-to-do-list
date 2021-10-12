@@ -165,22 +165,22 @@ async function editTask() {
       if (formValues) {
         //First, make sure user enters a task name
         if ( formValues[0] ) {
-            //Check what was input by user and send to DB without checking to see if anything actually changed.
-            //Build the data string to get sent to PUT method on server side.
 
-            //Get 'task name'. Use the 'encodeURIComponent' javascript function to make sure that the 
-            //ampersand (&) is handled correctly by the POST route on the server.
-            let dataString =  `task_name=${encodeURIComponent(formValues[0])}`;
-            //get 'assigned to'
-            if ( formValues[1] ){
-                dataString += `&assigned_to=${formValues[1]}`
+            //Get what was input by user and send to DB without checking to see if anything actually changed.
+            //Build the data string to get sent to PUT method on server side.
+            let taskName = `${formValues[0]}`;
+            let taskAssignedTo = `${formValues[1]}`;
+            let taskObject = {
+                task_name : taskName,
+                assigned_to: taskAssignedTo
             }
+            
             //id is on the <tr> element which is the "grandparent" of the button
             let idOfTask = grandparent.data( 'id' );
             $.ajax({        
                 method: 'PUT',
                 url: `/tasks?id=${idOfTask}`,
-                data: dataString
+                data: taskObject  //trying this
             }).then( function ( response ) {
                 Swal.fire('Task updated!', '', 'success')
                 getTasks();
@@ -193,7 +193,7 @@ async function editTask() {
                     footer: 'Check console for details.'
                     })  
             })            
-        } 
+        }         
       }  
 }
 /**

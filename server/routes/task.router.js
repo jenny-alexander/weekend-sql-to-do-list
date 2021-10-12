@@ -39,22 +39,26 @@ taskRouter.post( '/', ( req, res )=>{
 taskRouter.put( '/', ( req, res )=>{
     //dynamically get values that will be updated from req.body since we don't know 
     let queryString = `UPDATE tasks SET `;
-    console.log( req.body );
+
     //loop through the object values and corresponding keys by using Object.keys & Object.values functionality
     for ( let i = 0; i < Object.keys(req.body).length; i++ ) {
+
         let key = Object.keys(req.body)[i];
         let value = Object.values(req.body)[i];
         
-        //If the value is type 'string', add single quotes around it (necessary for DB update to work)
+        //Replace single quotes in the value with two single quotes. Required or the DB will not accept the UPDATE.
+        value = replaceApostrophe( value );
+       
+        // If the value is type 'string', add single quotes around it (necessary for DB update to work)
         if ( typeof value == 'string' ) {
             value = "'" + value + "'";
         }
         queryString += `${key} = ${value},`
     }
-    console.log(queryString);
     //get rid of the extra ',' at the end of queryString
     queryString = queryString.slice(0, queryString.length-1 ) 
-    queryString += ` WHERE id = '${req.query.id}';`;    
+
+    queryString += ` WHERE id = '${req.query.id}';`;      
 
     pool.query( queryString ).then( ( results )=>{
         res.sendStatus( 200 );
@@ -73,5 +77,9 @@ taskRouter.delete( '/', ( req, res )=>{
         res.sendStatus( 500 );
     })
 })
+function replaceApostrophe( singleApostropheString ) {
+    let doubleApostropheString = singleApostropheString.replace( /'/g, "''");
+    return doubleApostropheString;
+}
 
 module.exports = taskRouter;

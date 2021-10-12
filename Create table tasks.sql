@@ -7,10 +7,6 @@ CREATE TABLE tasks (
     id SERIAL PRIMARY KEY,
     task_name character varying(70) NOT NULL,
     assigned_to character varying(30),
-    date_created date,
-    date_completed date
+    completed boolean,
+    date_completed timestamp with time zone
 );
-
--- Indices -------------------------------------------------------
-
-CREATE UNIQUE INDEX tasks_pkey ON tasks(id int4_ops);
