@@ -4,6 +4,7 @@
 
 The objective of this stretch weekend challenge was to build a to-do list that uses all of the full stack frameworks and technologies that we have learned during out first 10 weeks at Prime Digital Academy. The to-do list should have a front-end that allows a user to enter a task and save it to a relational database. The user should also be able to delete a task on the front-end and the task will be deleted from the database.
 There should be a clear indication that the task was completed. In this case, I changed the background color of the row to green and showed a checkmark under the 'Completed' column.
+The tasks are listed in order of most recently created.
 
 I customized the requirements a little bit in order to have the application be used by more than one person. For example, a group of roomates or a family could use the application in order to keep track of tasks assigned to each person in the household. Specifically, I added:
 
