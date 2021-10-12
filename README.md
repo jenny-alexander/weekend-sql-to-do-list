@@ -6,7 +6,7 @@ The objective of this stretch weekend challenge was to build a to-do list that u
 There should be a clear indication that the task was completed. In this case, I changed the background color of the row to green and showed a checkmark under the 'Completed' column.
 The tasks are listed in order of most recently created.
 
-I customized the requirements a little bit in order to have the application be used by more than one person. For example, a group of roomates or a family could use the application in order to keep track of tasks assigned to each person in the household. Specifically, I added:
+I customized the requirements a bit in order to have the application be used by more than one person. For example, a group of roomates or a family could use the application in order to keep track of tasks assigned to each person in the household. Specifically, I added:
 
 - ability to assign a person to the task
 - ability to edit a task and the person assigned to it.
