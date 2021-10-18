@@ -13,7 +13,7 @@ I customized the requirements a bit in order to have the application be used by 
 
 ## Application demo
 
-![To-do list application](server/public/images/to_do_list_in_action.mp4)
+![To-do list application](server/public/images/to_do_list_in_action.gif)
 
 ## Screenshot of database
 
