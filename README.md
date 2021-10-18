@@ -11,9 +11,13 @@ I customized the requirements a bit in order to have the application be used by 
 - ability to assign a person to the task
 - ability to edit a task and the person assigned to it.
 
-## Screen Shot
+## Application demo
 
-![To-do list](server/public/images/sql-todo-list.png)
+![To-do list application](server/public/images/to_do_list_in_action.mp4)
+
+## Screenshot of database
+
+![To-do list database](server/public/images/sql_todo_list_db.png)
 
 ### Prerequisites
 
