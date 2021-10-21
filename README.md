@@ -11,6 +11,10 @@ I customized the requirements a bit in order to have the application be used by 
 - ability to assign a person to the task
 - ability to edit a task and the person assigned to it.
 
+## Try it yourself
+
+To use the fully functional to-do list, please visit: <https://boiling-chamber-83500.herokuapp.com/>.
+
 ## Application demo
 
 ![To-do list application](server/public/images/to_do_list_in_action.gif)
